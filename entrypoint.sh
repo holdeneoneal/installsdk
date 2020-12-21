@@ -3,11 +3,12 @@
 GO111MODULE=on
 R3V=v1.3.0
 OPERATOR_NAME=memcached-operator
+OPERATOR_INSTALL_DIR=$GITHUB_WORKSPACE/installsdk
 CRD_KIND=Memcached
 CRD_GROUP=cache
 CRD_VERSION=v1alpha1
 CRD_DOMAIN=example.com
-REPO_LOCATION=github.com/holdeneoneal/giddy
+OPERATOR_REPO=github.com/holdeneoneal/giddy
 env
 
 # First parm should be sdk version
@@ -29,12 +30,12 @@ function install_sdk {
 # First parm should be sdk version
 function init_api {
   echo "Initializing API for operator-sdk version: " $1
-  mkdir -p $OPERATOR_SDK_INSTALL_DIR/$1/$OPERATOR_NAME
-  echo "Created $OPERATOR_SDK_INSTALL_DIR/$1/$OPERATOR_NAME"
-  cd $OPERATOR_SDK_INSTALL_DIR/$1/$OPERATOR_NAME
-  operator-sdk-$1 init --domain=$CRD_DOMAIN --repo=$REPO_LOCATION/$OPERATOR_NAME
+  mkdir -p $OPERATOR_INSTALL_DIR/$1/$OPERATOR_NAME
+  echo "Created $OPERATOR_INSTALL_DIR/$1/$OPERATOR_NAME"
+  cd $OPERATOR_INSTALL_DIR/$1/$OPERATOR_NAME
+  operator-sdk-$1 init --domain=$CRD_DOMAIN --repo=$OPERATOR_REPO/$OPERATOR_NAME
   operator-sdk-$1 create api --group=$CRD_GROUP --version=$CRD_VERSION --kind=$CRD_KIND --resource=true --controller=true
-  echo "Opeartor created at:" $OPERATOR_SDK_INSTALL_DIR/$1/$OPERATOR_NAME
+  echo "Opeartor created at:" $OPERATOR_INSTALL_DIR/$1/$OPERATOR_NAME
 }
 
 install_sdk $OPERATOR_SDK_VERSION
