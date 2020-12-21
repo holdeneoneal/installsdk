@@ -1,22 +1,27 @@
 #!/bin/sh -l
 
 GO111MODULE=on
-R2V=v1.2.0
 R3V=v1.3.0
-echo "GITHUB_WORKSPACE: " $GITHUB_WORKSPACE
+OPERATOR_NAME=memcached-operator
+CRD_KIND=Memcached
+CRD_GROUP=cache
+CRD_VERSION=v1alpha1
+CRD_DOMAIN=example.com
+REPO_LOCATION=github.com/holdeneoneal/giddy
+env
 
 # First parm should be sdk version
 function install_sdk {
-  echo "Download and Install operator-sdk: " $1
-  if [ $1 == "v1.2.0" ]; then
-    curl -LO https://github.com/operator-framework/operator-sdk/releases/download/$1/operator-sdk-$1-x86_64-linux-gnu
-    chmod +x operator-sdk-$1-x86_64-linux-gnu && sudo mkdir -p /usr/local/bin/ && sudo cp operator-sdk-$1-x86_64-linux-gnu /usr/local/bin/operator-sdk-$1 && rm operator-sdk-$1-x86_64-linux-gnu
-  else
+  echo "Install operator-sdk: " $1
+  if [ $1 == $R3V ]; then
     export ARCH=$(case $(arch) in x86_64) echo -n amd64 ;; aarch64) echo -n arm64 ;; *) echo -n $(arch) ;; esac)
     export OS=$(uname | awk '{print tolower($0)}')
     export OPERATOR_SDK_DL_URL=https://github.com/operator-framework/operator-sdk/releases/latest/download
     curl -LO ${OPERATOR_SDK_DL_URL}/operator-sdk_${OS}_${ARCH}
     chmod +x operator-sdk_${OS}_${ARCH} && sudo mv operator-sdk_${OS}_${ARCH} /usr/local/bin/operator-sdk-$1
+  else
+    curl -LO https://github.com/operator-framework/operator-sdk/releases/download/$1/operator-sdk-$1-x86_64-linux-gnu
+    chmod +x operator-sdk-$1-x86_64-linux-gnu && sudo mkdir -p /usr/local/bin/ && sudo cp operator-sdk-$1-x86_64-linux-gnu /usr/local/bin/operator-sdk-$1 && rm operator-sdk-$1-x86_64-linux-gnu
   fi
   operator-sdk-$1 version
 }
@@ -24,18 +29,14 @@ function install_sdk {
 # First parm should be sdk version
 function init_api {
   echo "Initializing API for operator-sdk version: " $1
-  mkdir -p $GITHUB_WORKSPACE/$1/memcached-operator
-  echo "Created /workspace/$1/memcached-operator"
-  cd $GITHUB_WORKSPACE/$1/memcached-operator
-  operator-sdk-$1 init --domain=example.com --repo=github.com/holdeneoneal/giddy/memcached-operator
-  operator-sdk-$1 create api --group=cache --version=v1alpha1 --kind=Memcached --resource=true --controller=true
+  mkdir -p $OPERATOR_SDK_INSTALL_DIR/$1/$OPERATOR_NAME
+  echo "Created $OPERATOR_SDK_INSTALL_DIR/$1/$OPERATOR_NAME"
+  cd $OPERATOR_SDK_INSTALL_DIR/$1/$OPERATOR_NAME
+  operator-sdk-$1 init --domain=$CRD_DOMAIN --repo=$REPO_LOCATION/$OPERATOR_NAME
+  operator-sdk-$1 create api --group=$CRD_GROUP --version=$CRD_VERSION --kind=$CRD_KIND --resource=true --controller=true
+  echo "Opeartor created at:" $OPERATOR_SDK_INSTALL_DIR/$1/$OPERATOR_NAME
 }
 
-install_sdk $R2V
-install_sdk $R3V
-
-init_api $R2V
-init_api $R3V
-
+install_sdk $OPERATOR_SDK_VERSION
+init_api $OPERATOR_SDK_VERSION
 echo "ENTRYPOINT complete"
-# diff /workspace/$R2V/memcached-operator /workspace/$R3V/memcached-operator
