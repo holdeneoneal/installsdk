@@ -4,15 +4,6 @@ GO111MODULE=on
 R2V=v1.2.0
 R3V=v1.3.0
 
-install_sdk $R2V
-install_sdk $R3V
-
-init_api $R2V
-init_api $R3V
-
-echo "ENTRYPOINT complete"
-# diff /workspace/$R2V/memcached-operator /workspace/$R3V/memcached-operator
-
 # First parm should be sdk version
 function install_sdk {
   "Download and Install operator-sdk: " $1
@@ -38,3 +29,12 @@ function init_api {
   operator-sdk-$1 init --domain=example.com --repo=github.com/holdeneoneal/giddy/memcached-operator
   operator-sdk-$1 create api --group=cache --version=v1alpha1 --kind=Memcached --resource=true --controller=true
 }
+
+install_sdk $R2V
+install_sdk $R3V
+
+init_api $R2V
+init_api $R3V
+
+echo "ENTRYPOINT complete"
+# diff /workspace/$R2V/memcached-operator /workspace/$R3V/memcached-operator
