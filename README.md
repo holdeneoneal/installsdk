@@ -1,5 +1,4 @@
-# Container Action Template
+# Install SDK
 
-To get started, click the `Use this template` button on this repository [which will create a new repository based on this template](https://github.blog/2019-06-06-generate-new-repositories-with-repository-templates/).
-
-For info on how to build your first Container action, see the [toolkit docs folder](https://github.com/actions/toolkit/blob/master/docs/container-action.md).
+This is a test to see if I can get a Github action to install to version of the Operator SDK
+and compare the output of their generated projects.
