@@ -1,5 +1,6 @@
 #!/bin/sh -l
 
+GO111MODULE=on
 R2V=v1.2.0
 R3V=v1.3.0
 
@@ -9,8 +10,8 @@ install_sdk $R3V
 init_api $R2V
 init_api $R3V
 
-
-diff /workspace/$R2V/memcached-operator /workspace/$R3V/memcached-operator
+echo "ENTRYPOINT complete"
+# diff /workspace/$R2V/memcached-operator /workspace/$R3V/memcached-operator
 
 # First parm should be sdk version
 function install_sdk {
