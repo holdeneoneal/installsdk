@@ -6,7 +6,7 @@ R3V=v1.3.0
 
 # First parm should be sdk version
 function install_sdk {
-  "Download and Install operator-sdk: " $1
+  echo "Download and Install operator-sdk: " $1
   if [ $1 == "v1.2.0" ]; then
     curl -LO https://github.com/operator-framework/operator-sdk/releases/download/$1/operator-sdk-$1-x86_64-linux-gnu
     chmod +x operator-sdk-$1-x86_64-linux-gnu && sudo mkdir -p /usr/local/bin/ && sudo cp operator-sdk-$1-x86_64-linux-gnu /usr/local/bin/operator-sdk-$1 && rm operator-sdk-$1-x86_64-linux-gnu
