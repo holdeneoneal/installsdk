@@ -3,6 +3,7 @@
 GO111MODULE=on
 R2V=v1.2.0
 R3V=v1.3.0
+echo "GITHUB_WORKSPACE: " $GITHUB_WORKSPACE
 
 # First parm should be sdk version
 function install_sdk {
@@ -23,9 +24,9 @@ function install_sdk {
 # First parm should be sdk version
 function init_api {
   echo "Initializing API for operator-sdk version: " $1
-  mkdir -p /workspace/$1/memcached-operator
+  mkdir -p $GITHUB_WORKSPACE/$1/memcached-operator
   echo "Created /workspace/$1/memcached-operator"
-  cd /workspace/$1/memcached-operator
+  cd $GITHUB_WORKSPACE/$1/memcached-operator
   operator-sdk-$1 init --domain=example.com --repo=github.com/holdeneoneal/giddy/memcached-operator
   operator-sdk-$1 create api --group=cache --version=v1alpha1 --kind=Memcached --resource=true --controller=true
 }
