@@ -19,10 +19,10 @@ function install_sdk {
     export OS=$(uname | awk '{print tolower($0)}')
     export OPERATOR_SDK_DL_URL=https://github.com/operator-framework/operator-sdk/releases/latest/download
     curl -LO ${OPERATOR_SDK_DL_URL}/operator-sdk_${OS}_${ARCH}
-    chmod +x operator-sdk_${OS}_${ARCH} && sudo mv operator-sdk_${OS}_${ARCH} /usr/local/bin/operator-sdk-$1
+    chmod +x operator-sdk_${OS}_${ARCH} && mv operator-sdk_${OS}_${ARCH} /usr/local/bin/operator-sdk-$1
   else
     curl -LO https://github.com/operator-framework/operator-sdk/releases/download/$1/operator-sdk-$1-x86_64-linux-gnu
-    chmod +x operator-sdk-$1-x86_64-linux-gnu && sudo mkdir -p /usr/local/bin/ && sudo cp operator-sdk-$1-x86_64-linux-gnu /usr/local/bin/operator-sdk-$1 && rm operator-sdk-$1-x86_64-linux-gnu
+    chmod +x operator-sdk-$1-x86_64-linux-gnu && mkdir -p /usr/local/bin/ && cp operator-sdk-$1-x86_64-linux-gnu /usr/local/bin/operator-sdk-$1 && rm operator-sdk-$1-x86_64-linux-gnu
   fi
   operator-sdk-$1 version
 }
