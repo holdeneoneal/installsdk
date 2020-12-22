@@ -1,5 +1,6 @@
 #!/bin/sh -l
 
+echo "SDK Input version: " $OPERATOR_SDK_VERSION
 GO111MODULE=on
 R3V=v1.3.0
 OPERATOR_NAME=memcached-operator
